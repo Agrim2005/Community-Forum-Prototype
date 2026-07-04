@@ -31,7 +31,7 @@ const Button = ({
         py-2
         rounded-lg
         font-medium
-        transition
+        transition-all duration-200
         disabled:opacity-50
         cursor-pointer
       `}
