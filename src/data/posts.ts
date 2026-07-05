@@ -12,7 +12,23 @@ export const posts: Post[] = [
       "Just completed Week 1 of my React Community Forum project! Authentication, routing, Zustand, and reusable components are all working. Excited to start building the feed!",
     createdAt: "2 hours ago",
     likes: 15,
-    comments: 6,
+    comments: 2,
+
+    isLiked: false,
+    isBookmarked: false,
+
+    commentList: [
+      {
+        id: "1",
+        author: "Sarah",
+        text: "Great work!",
+      },
+      {
+        id: "2",
+        author: "Mike",
+        text: "Keep it up 🚀",
+      },
+    ],
   },
   {
     id: "2",
@@ -25,6 +41,17 @@ export const posts: Post[] = [
       "What's your favorite React state management library in 2026? I've been enjoying Zustand because of its simplicity. 🚀",
     createdAt: "5 hours ago",
     likes: 24,
-    comments: 9,
+    comments: 1,
+
+    isLiked: false,
+    isBookmarked: false,
+
+    commentList: [
+      {
+        id: "3",
+        author: "John",
+        text: "Tailwind is awesome.",
+      },
+    ],
   },
 ];
