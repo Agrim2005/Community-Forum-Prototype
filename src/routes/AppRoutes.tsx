@@ -9,6 +9,8 @@ import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import NotFoundPage from "../pages/errors/NotFoundPage";
 
+import CommunitiesPage from "@/pages/communities/CommunitiesPage";
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -22,6 +24,11 @@ const AppRoutes = () => {
         >
           <Route path="/" element={<HomePage />} />
         </Route>
+
+        <Route
+          path="/community"
+          element={<CommunitiesPage />}
+        />
 
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />
