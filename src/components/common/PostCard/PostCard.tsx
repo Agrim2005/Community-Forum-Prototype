@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Avatar, Badge, Button, Card } from "@/components/ui";
 import type { Post } from "@/types/post.types";
+import { useBookmarkStore } from "@/store/bookmark.store";
 
 interface PostCardProps {
     post: Post;
@@ -9,7 +10,13 @@ interface PostCardProps {
 const PostCard = ({ post }: PostCardProps) => {
     const [liked, setLiked] = useState(post.isLiked);
     const [likes, setLikes] = useState(post.likes);
-    const [bookmarked, setBookmarked] = useState(post.isBookmarked);
+    const {
+  addBookmark,
+  removeBookmark,
+  isBookmarked,
+} = useBookmarkStore();
+
+const bookmarked = isBookmarked(post.id);
     const [showComments, setShowComments] = useState(false);
 
     const handleLike = () => {
@@ -23,8 +30,12 @@ const PostCard = ({ post }: PostCardProps) => {
 
     // Moved outside of handleLike to fix the scoping error
     const handleBookmark = () => {
-        setBookmarked(!bookmarked);
-    };
+  if (bookmarked) {
+    removeBookmark(post.id);
+  } else {
+    addBookmark(post);
+  }
+};
     const handleComments = () => {
         setShowComments(!showComments);
     };

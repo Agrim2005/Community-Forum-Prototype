@@ -1,10 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-
 import { useAuthStore } from "@/store/auth.store";
 
 const Navbar = () => {
   const navigate = useNavigate();
-
   const logout = useAuthStore((state) => state.logout);
 
   const handleLogout = () => {
@@ -37,6 +35,29 @@ const Navbar = () => {
             Communities
           </Link>
 
+          <Link
+            to="/bookmarks"
+            className="hover:text-purple-600 transition"
+          >
+            Bookmarks
+          </Link>
+
+          <Link
+            to="/notifications"
+            className="hover:text-purple-600 transition"
+          >
+            Notifications
+          </Link>
+
+          {/* 1. Moved the Profile Link outside of the Logout button */}
+          <Link
+            to="/profile"
+            className="hover:text-purple-600 transition"
+          >
+            Profile
+          </Link>
+
+          {/* 2. Now the button only contains the text "Logout" */}
           <button
             onClick={handleLogout}
             className="hover:text-purple-600 transition cursor-pointer"

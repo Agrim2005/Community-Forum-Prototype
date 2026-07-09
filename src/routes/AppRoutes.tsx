@@ -11,6 +11,12 @@ import NotFoundPage from "../pages/errors/NotFoundPage";
 
 import CommunitiesPage from "@/pages/communities/CommunitiesPage";
 
+import BookmarksPage from "@/pages/bookmarks";
+
+import NotificationsPage from "@/pages/notifications/NotificationsPage";
+
+import ProfilePage from "@/pages/profile/ProfilePage";
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -34,6 +40,21 @@ const AppRoutes = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<RegisterPage />} />
         </Route>
+
+        <Route
+          path="/bookmarks"
+          element={<BookmarksPage />}
+        />
+
+        <Route
+          path="/notifications"
+          element={<NotificationsPage />}
+        />
+
+        <Route
+          path="/profile"
+          element={<ProfilePage />}
+        />
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

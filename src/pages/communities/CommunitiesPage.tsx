@@ -6,14 +6,14 @@ const CommunitiesPage = () => {
     const [search, setSearch] = useState("");
 
     const filteredCommunities = communities.filter((community) => {
-  const query = search.toLowerCase();
+        const query = search.toLowerCase();
 
-  return (
-    community.name.toLowerCase().includes(query) ||
-    community.category.toLowerCase().includes(query) ||
-    community.description.toLowerCase().includes(query)
-  );
-});
+        return (
+            community.name.toLowerCase().includes(query) ||
+            community.category.toLowerCase().includes(query) ||
+            community.description.toLowerCase().includes(query)
+        );
+    });
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-10">
