@@ -57,7 +57,13 @@ const Navbar = () => {
             Profile
           </Link>
 
-          {/* 2. Now the button only contains the text "Logout" */}
+          <Link
+            to="/messages"
+            className="hover:text-purple-600 transition"
+          >
+            Messages
+          </Link>
+
           <button
             onClick={handleLogout}
             className="hover:text-purple-600 transition cursor-pointer"

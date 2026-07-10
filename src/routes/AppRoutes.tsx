@@ -17,6 +17,8 @@ import NotificationsPage from "@/pages/notifications/NotificationsPage";
 
 import ProfilePage from "@/pages/profile/ProfilePage";
 
+import MessagesPage from "@/pages/messages";
+
 const AppRoutes = () => {
   return (
     <BrowserRouter>
@@ -54,6 +56,11 @@ const AppRoutes = () => {
         <Route
           path="/profile"
           element={<ProfilePage />}
+        />
+
+        <Route
+          path="/messages"
+          element={<MessagesPage />}
         />
 
         <Route path="*" element={<NotFoundPage />} />
