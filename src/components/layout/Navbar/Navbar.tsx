@@ -64,10 +64,18 @@ const Navbar = () => {
             Messages
           </Link>
 
+          <Link
+            to="/settings"
+            className="hover:text-purple-600 transition"
+          >
+            Settings
+          </Link>
+
           <button
             onClick={handleLogout}
             className="hover:text-purple-600 transition cursor-pointer"
           >
+
             Logout
           </button>
         </div>

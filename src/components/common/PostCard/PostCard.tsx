@@ -2,21 +2,23 @@ import { useState } from "react";
 import { Avatar, Badge, Button, Card } from "@/components/ui";
 import type { Post } from "@/types/post.types";
 import { useBookmarkStore } from "@/store/bookmark.store";
+import { useAuthStore } from "@/store/auth.store";
+import { usePostStore } from "@/store/post.store";
 
 interface PostCardProps {
     post: Post;
 }
 
 const PostCard = ({ post }: PostCardProps) => {
+    // FIX: Moved hooks inside the component
+    const user = useAuthStore((state) => state.user);
+    const deletePost = usePostStore((state) => state.deletePost);
+
     const [liked, setLiked] = useState(post.isLiked);
     const [likes, setLikes] = useState(post.likes);
-    const {
-  addBookmark,
-  removeBookmark,
-  isBookmarked,
-} = useBookmarkStore();
+    const { addBookmark, removeBookmark, isBookmarked } = useBookmarkStore();
 
-const bookmarked = isBookmarked(post.id);
+    const bookmarked = isBookmarked(post.id);
     const [showComments, setShowComments] = useState(false);
 
     const handleLike = () => {
@@ -28,43 +30,45 @@ const bookmarked = isBookmarked(post.id);
         setLiked(!liked);
     };
 
-    // Moved outside of handleLike to fix the scoping error
     const handleBookmark = () => {
-  if (bookmarked) {
-    removeBookmark(post.id);
-  } else {
-    addBookmark(post);
-  }
-};
+        if (bookmarked) {
+            removeBookmark(post.id);
+        } else {
+            addBookmark(post);
+        }
+    };
+
+    const handleDelete = () => {
+        const confirmed = window.confirm(
+            "Are you sure you want to delete this post?"
+        );
+
+        if (!confirmed) return;
+
+        deletePost(post.id);
+    };
+
     const handleComments = () => {
         setShowComments(!showComments);
     };
+
     return (
         <Card>
             <div className="space-y-5">
                 {/* Header */}
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
-                        <Avatar
-                            src={post.author.avatar}
-                            alt={post.author.name}
-                        />
+                        <Avatar src={post.author.avatar} alt={post.author.name} />
                         <div>
-                            <h3 className="font-semibold">
-                                {post.author.name}
-                            </h3>
-                            <p className="text-sm text-gray-500">
-                                {post.createdAt}
-                            </p>
+                            <h3 className="font-semibold"> {post.author.name} </h3>
+                            <p className="text-sm text-gray-500"> {post.createdAt} </p>
                         </div>
                     </div>
                     <Badge>Community</Badge>
                 </div>
 
                 {/* Post Content */}
-                <p className="text-gray-800 leading-7">
-                    {post.content}
-                </p>
+                <p className="text-gray-800 leading-7"> {post.content} </p>
 
                 {/* Footer */}
                 <div className="border-t pt-4">
@@ -76,48 +80,34 @@ const bookmarked = isBookmarked(post.id);
                     {showComments && (
                         <div className="mt-5 border-t pt-4 space-y-3">
                             {post.commentList.map((comment) => (
-                                <div
-                                    key={comment.id}
-                                    className="bg-gray-100 rounded-lg p-3"
-                                >
-                                    <p className="font-semibold">
-                                        {comment.author}
-                                    </p>
-
-                                    <p className="text-gray-700">
-                                        {comment.text}
-                                    </p>
+                                <div key={comment.id} className="bg-gray-100 rounded-lg p-3" >
+                                    <p className="font-semibold"> {comment.author} </p>
+                                    <p className="text-gray-700"> {comment.text} </p>
                                 </div>
                             ))}
                         </div>
                     )}
 
                     <div className="grid grid-cols-3 gap-3">
-                        {/* Fixed Buttons: Added Like button, removed duplicate Save */}
-                        <Button
-                            variant="secondary"
-                            fullWidth
-                            onClick={handleLike}
-                        >
+                        <Button variant="secondary" fullWidth onClick={handleLike} >
                             {liked ? "❤️ Liked" : "🤍 Like"}
                         </Button>
-
-                        <Button
-                            variant="secondary"
-                            fullWidth
-                            onClick={handleComments}
-                        >
+                        <Button variant="secondary" fullWidth onClick={handleComments} >
                             {showComments ? "🙈 Hide" : "💬 Comment"}
                         </Button>
-
-                        <Button
-                            variant="secondary"
-                            fullWidth
-                            onClick={handleBookmark}
-                        >
+                        <Button variant="secondary" fullWidth onClick={handleBookmark} >
                             {bookmarked ? "📌 Saved" : "🔖 Save"}
                         </Button>
                     </div>
+
+                    {/* Moved delete outside the grid layout so it doesn't break the 3-column system */}
+                    {post.author.id === user?.id && (
+                        <div className="mt-4">
+                            <Button variant="secondary" fullWidth onClick={handleDelete} >
+                                🗑️ Delete Post
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </div>
         </Card>
