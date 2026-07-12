@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 import type { Post } from "@/types/post.types";
 
@@ -12,25 +13,25 @@ interface BookmarkStore {
   isBookmarked: (id: string) => boolean;
 }
 
-export const useBookmarkStore = create<BookmarkStore>(
-  (set, get) => ({
-    bookmarks: [],
+export const useBookmarkStore = create<BookmarkStore>()(
+  persist(
+    (set, get) => ({
+      bookmarks: [],
 
-    addBookmark: (post) =>
-      set((state) => ({
-        bookmarks: [...state.bookmarks, post],
-      })),
+      addBookmark: (post) =>
+        set((state) => ({
+          bookmarks: [...state.bookmarks, post],
+        })),
 
-    removeBookmark: (id) =>
-      set((state) => ({
-        bookmarks: state.bookmarks.filter(
-          (post) => post.id !== id
-        ),
-      })),
+      removeBookmark: (id) =>
+        set((state) => ({
+          bookmarks: state.bookmarks.filter((post) => post.id !== id),
+        })),
 
-    isBookmarked: (id) =>
-      get().bookmarks.some(
-        (post) => post.id === id
-      ),
-  })
+      isBookmarked: (id) => get().bookmarks.some((post) => post.id === id),
+    }),
+    {
+      name: "bookmarks-storage",
+    },
+  ),
 );

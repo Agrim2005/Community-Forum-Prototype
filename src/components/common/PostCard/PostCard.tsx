@@ -41,7 +41,7 @@ const PostCard = ({ post }: PostCardProps) => {
 
     const handleDelete = () => {
         const confirmed = window.confirm(
-            "Are you sure you want to delete this post?"
+            "This action cannot be undone.\n\nDo you want to delete this post?"
         );
 
         if (!confirmed) return;
@@ -132,7 +132,18 @@ const PostCard = ({ post }: PostCardProps) => {
                                     </Button>
                                 )}
                             </div>
-                            
+
+                            <Button
+                                variant="secondary"
+                                fullWidth
+                                onClick={() => {
+                                    setEditedContent(post.content);
+                                    setIsEditing(false);
+                                }}
+                            >
+                                Cancel
+                            </Button>
+
                             <div className="mt-3">
                                 <Button variant="secondary" fullWidth onClick={handleDelete}>
                                     🗑️ Delete Post
