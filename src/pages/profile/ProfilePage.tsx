@@ -1,30 +1,31 @@
 import { Badge, Button, Card } from "@/components/ui";
 import { user } from "@/data/user";
+import { usePostStore } from "@/store/post.store";
 
 const ProfilePage = () => {
+  const posts = usePostStore((state) => state.posts);
+
+  const myPosts = posts.filter(
+    (post) => post.author.id === user.id
+  );
+
   return (
     <div className="max-w-5xl mx-auto py-10 px-6">
 
       {/* Cover Image */}
-
       <div className="rounded-xl overflow-hidden shadow-md">
-
         <img
           src={user.cover}
           alt="Cover"
           className="w-full h-60 object-cover"
         />
-
       </div>
 
       {/* Profile */}
-
       <Card>
-
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
           <div className="flex items-center gap-6">
-
             <img
               src={user.avatar}
               alt={user.name}
@@ -32,7 +33,6 @@ const ProfilePage = () => {
             />
 
             <div>
-
               <h1 className="text-3xl font-bold">
                 {user.name}
               </h1>
@@ -52,9 +52,7 @@ const ProfilePage = () => {
               <p className="text-sm text-gray-500">
                 Joined {user.joined}
               </p>
-
             </div>
-
           </div>
 
           <Button>
@@ -62,52 +60,74 @@ const ProfilePage = () => {
           </Button>
 
         </div>
-
       </Card>
 
-      {/* Statistics */}
-
+      {/* Statistics & Badges */}
       <div className="grid md:grid-cols-2 gap-6 mt-8">
 
         <Card>
-
           <h2 className="font-semibold text-xl mb-4">
             Statistics
           </h2>
 
           <div className="space-y-3">
-
             <p>
-              📝 Posts: <strong>{user.posts}</strong>
+              📝 Posts: <strong>{myPosts.length}</strong>
             </p>
 
             <p>
               👥 Communities: <strong>{user.communities}</strong>
             </p>
-
           </div>
-
         </Card>
 
         <Card>
-
           <h2 className="font-semibold text-xl mb-4">
             Badges
           </h2>
 
           <div className="flex flex-wrap gap-3">
-
             {user.badges.map((badge) => (
               <Badge key={badge}>
                 {badge}
               </Badge>
             ))}
-
           </div>
-
         </Card>
 
       </div>
+
+      {/* My Posts */}
+      <Card className="mt-8">
+
+        <h2 className="text-2xl font-semibold mb-6">
+          My Posts
+        </h2>
+
+        <div className="space-y-4">
+
+          {myPosts.length === 0 ? (
+            <p className="text-gray-500">
+              You haven't created any posts yet.
+            </p>
+          ) : (
+            myPosts.map((post) => (
+              <div
+                key={post.id}
+                className="border rounded-lg p-4"
+              >
+                <p>{post.content}</p>
+
+                <p className="text-sm text-gray-500 mt-2">
+                  {post.createdAt}
+                </p>
+              </div>
+            ))
+          )}
+
+        </div>
+
+      </Card>
 
     </div>
   );

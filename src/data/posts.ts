@@ -4,12 +4,12 @@ export const posts: Post[] = [
   {
     id: "1",
     author: {
-      id: "1",
+      id: "101",
       name: "John Doe",
       avatar: "https://i.pravatar.cc/150?img=10",
     },
     content:
-      "Just completed Week 1 of my React Community Forum project! Authentication, routing, Zustand, and reusable components are all working. Excited to start building the feed!",
+      "Learning basics of TypeScript.",
     createdAt: "2 hours ago",
     likes: 15,
     comments: 2,
@@ -33,7 +33,7 @@ export const posts: Post[] = [
   {
     id: "2",
     author: {
-      id: "2",
+      id: "102",
       name: "Sarah Johnson",
       avatar: "https://i.pravatar.cc/150?img=20",
     },

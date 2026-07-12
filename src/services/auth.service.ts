@@ -7,9 +7,9 @@ export const loginUser = async (
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   return {
-  id: crypto.randomUUID(),
-  name: "Demo User",
+  id: "1",
+  name: "Agrim",
   email: data.email,
-  avatar: "https://i.pravatar.cc/150?img=12",
+  avatar: "https://i.pravatar.cc/150?img=8",
 };
 };
