@@ -12,30 +12,10 @@ const HomePage = () => {
   const { posts, addPost } = usePostStore();
 
   const handleAddPost = (content: string) => {
-    addPost({
-      id: crypto.randomUUID(),
+  if (!user) return;
 
-      author: {
-        id: user?.id ?? "0",
-        name: user?.name ?? "Anonymous",
-        avatar:
-          user?.avatar ??
-          "https://i.pravatar.cc/150?img=1",
-      },
-
-      content,
-
-      createdAt: "Just now",
-
-      likes: 0,
-      comments: 0,
-
-      isLiked: false,
-      isBookmarked: false,
-
-      commentList: [],
-    });
-  };
+  addPost(content, user);
+};
 
   return (
     <div className="max-w-5xl mx-auto py-10 px-6">

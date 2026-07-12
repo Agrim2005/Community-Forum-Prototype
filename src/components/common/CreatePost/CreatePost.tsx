@@ -9,7 +9,7 @@ interface CreatePostProps {
 const CreatePost = ({ onAddPost }: CreatePostProps) => {
     // 1. Move the hook inside the component
     const user = useAuthStore((state) => state.user);
-    
+
     const [content, setContent] = useState("");
 
     const handleSubmit = () => {
@@ -38,19 +38,27 @@ const CreatePost = ({ onAddPost }: CreatePostProps) => {
                     </div>
                 </div>
 
-                {/* Textarea properly separated from other elements */}
+                <p className="font-semibold mb-2">
+                    Editing Post
+                </p>
+                
                 <textarea
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="Share your thoughts with the community..."
-                    className="w-full border rounded-lg p-4 resize-none outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-full border rounded-lg p-4 resize-none outline-none focus:ring-2 focus:ring-purple-500 transition"
                     rows={4}
                     maxLength={500}
                 />
 
                 {/* Character count div placed below the textarea */}
                 <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-500">
+                    <span
+                        className={`text-sm ${content.length > 450
+                            ? "text-red-500"
+                            : "text-gray-500"
+                            }`}
+                    >
                         {content.length}/500 characters
                     </span>
                 </div>
@@ -59,6 +67,7 @@ const CreatePost = ({ onAddPost }: CreatePostProps) => {
                     <Button
                         onClick={handleSubmit}
                         disabled={!content.trim()}
+                        fullWidth
                     >
                         Post
                     </Button>
