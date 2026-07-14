@@ -22,7 +22,7 @@ const ProfilePage = () => {
       </div>
 
       {/* Profile */}
-      
+      <Card>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
