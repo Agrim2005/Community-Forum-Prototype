@@ -10,14 +10,14 @@ const ProfilePage = () => {
   );
 
   return (
-    <div className="max-w-5xl mx-auto py-10 px-6">
+    <div className="max-w-5xl mx-auto py-6 sm:py-10 px-4 sm:px-6">
 
       {/* Cover Image */}
       <div className="rounded-xl overflow-hidden shadow-md">
         <img
           src={user.cover}
           alt="Cover"
-          className="w-full h-60 object-cover"
+          className="w-full h-40 sm:h-60 object-cover"
         />
       </div>
 
@@ -25,11 +25,11 @@ const ProfilePage = () => {
       <Card>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
             <img
               src={user.avatar}
               alt={user.name}
-              className="w-28 h-28 rounded-full border-4 border-white shadow-lg"
+              className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-white shadow-lg shrink-0"
             />
 
             <div>

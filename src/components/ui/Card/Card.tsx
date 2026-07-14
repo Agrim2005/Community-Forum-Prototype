@@ -1,6 +1,10 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import type {
+  HTMLAttributes,
+  ReactNode,
+} from "react";
 
-interface CardProps extends HTMLAttributes<HTMLDivElement> {
+interface CardProps
+  extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
 
@@ -14,15 +18,17 @@ const Card = ({
       {...props}
       className={`
         bg-white
+        text-gray-900
+        dark:bg-gray-800
+        dark:text-gray-100
         rounded-xl
         shadow-md
         p-6
         border
         border-gray-200
-        transition-all
-        duration-300
-        hover:shadow-xl
-        hover:-translate-y-1
+        dark:border-gray-700
+        transition-colors
+        duration-200
         ${className}
       `}
     >

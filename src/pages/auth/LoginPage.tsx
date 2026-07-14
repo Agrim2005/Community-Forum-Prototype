@@ -37,11 +37,11 @@ const LoginPage = () => {
   }; // <-- ADDED: Closing bracket for onSubmit was missing here
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
       <Card>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-5 w-96"
+          className="flex flex-col gap-5 w-full max-w-96"
         >
           <h1 className="text-3xl font-bold text-center">
             Login

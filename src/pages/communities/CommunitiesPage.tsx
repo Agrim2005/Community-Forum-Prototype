@@ -16,9 +16,9 @@ const CommunitiesPage = () => {
     });
 
     return (
-        <div className="max-w-7xl mx-auto px-6 py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
             <div className="mb-10">
-                <h1 className="text-4xl font-bold">
+                <h1 className="text-2xl sm:text-4xl font-bold">
                     Communities
                 </h1>
 
