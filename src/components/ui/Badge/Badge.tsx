@@ -1,12 +1,51 @@
-import type { ReactNode } from "react";
+import React from "react";
+import clsx from "clsx";
 
 interface BadgeProps {
-  children: ReactNode;
+  children: React.ReactNode;
+  variant?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "warning"
+    | "danger"
+    | "info";
+  size?: "sm" | "md";
+  rounded?: boolean;
+  className?: string;
 }
 
-const Badge = ({ children }: BadgeProps) => {
+const variantClasses = {
+  primary: "bg-blue-100 text-blue-700",
+  secondary: "bg-gray-100 text-gray-700",
+  success: "bg-green-100 text-green-700",
+  warning: "bg-yellow-100 text-yellow-700",
+  danger: "bg-red-100 text-red-700",
+  info: "bg-cyan-100 text-cyan-700",
+};
+
+const sizeClasses = {
+  sm: "px-2 py-0.5 text-xs",
+  md: "px-3 py-1 text-sm",
+};
+
+const Badge: React.FC<BadgeProps> = ({
+  children,
+  variant = "primary",
+  size = "md",
+  rounded = true,
+  className,
+}) => {
   return (
-    <span className="bg-purple-100 text-purple-700 text-xs font-semibold px-3 py-1 rounded-full">
+    <span
+      className={clsx(
+        "inline-flex items-center justify-center font-medium",
+        variantClasses[variant],
+        sizeClasses[size],
+        rounded ? "rounded-full" : "rounded-md",
+        className
+      )}
+    >
       {children}
     </span>
   );

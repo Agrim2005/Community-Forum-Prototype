@@ -1,36 +1,44 @@
-import type {
-  HTMLAttributes,
-  ReactNode,
-} from "react";
+import React from "react";
+import clsx from "clsx";
 
-interface CardProps
-  extends HTMLAttributes<HTMLDivElement> {
-  children: ReactNode;
+interface CardProps {
+  children: React.ReactNode;
+  className?: string;
+  padding?: "none" | "sm" | "md" | "lg";
+  shadow?: "none" | "sm" | "md" | "lg";
+  bordered?: boolean;
 }
 
-const Card = ({
+const paddingClasses = {
+  none: "",
+  sm: "p-3",
+  md: "p-5",
+  lg: "p-7",
+};
+
+const shadowClasses = {
+  none: "",
+  sm: "shadow-sm",
+  md: "shadow-md",
+  lg: "shadow-lg",
+};
+
+const Card: React.FC<CardProps> = ({
   children,
-  className = "",
-  ...props
-}: CardProps) => {
+  className,
+  padding = "md",
+  shadow = "md",
+  bordered = true,
+}) => {
   return (
     <div
-      {...props}
-      className={`
-        bg-white
-        text-gray-900
-        dark:bg-gray-800
-        dark:text-gray-100
-        rounded-xl
-        shadow-md
-        p-6
-        border
-        border-gray-200
-        dark:border-gray-700
-        transition-colors
-        duration-200
-        ${className}
-      `}
+      className={clsx(
+        "rounded-xl bg-white dark:bg-gray-800 transition-colors",
+        paddingClasses[padding],
+        shadowClasses[shadow],
+        bordered && "border border-gray-200 dark:border-gray-700",
+        className
+      )}
     >
       {children}
     </div>
