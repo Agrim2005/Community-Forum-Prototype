@@ -4,7 +4,12 @@
   "description": "Backend API for Community Forum",
   "private": true,
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/src/server.js",
+    "lint": "eslint ."
+  },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
