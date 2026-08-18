@@ -1,0 +1,117 @@
+### Login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@communityforum.com",
+  "password": "Password123!"
+}
+
+### Get all posts
+GET http://localhost:5000/api/posts
+
+### Get single post
+GET http://localhost:5000/api/posts/98bc8631-53bc-4c59-a62a-db656c261233
+
+### Create post
+POST http://localhost:5000/api/posts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzYyMzUsImV4cCI6MTc4NzY4MTAzNX0.g36d1_URGaCjkzj11_kq1CeSw3NYY-yqUNomNKPrxNM
+
+{
+  "content": "Testing complete post CRUD functionality."
+}
+
+### Update post
+PATCH http://localhost:5000/api/posts/c41ec07e-5034-49dd-865e-8d5815f3ec2a
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzYyMzUsImV4cCI6MTc4NzY4MTAzNX0.g36d1_URGaCjkzj11_kq1CeSw3NYY-yqUNomNKPrxNM
+
+{
+  "content": "Testing updated post functionality."
+}
+
+### Delete post
+DELETE http://localhost:5000/api/posts/c41ec07e-5034-49dd-865e-8d5815f3ec2a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzYyMzUsImV4cCI6MTc4NzY4MTAzNX0.g36d1_URGaCjkzj11_kq1CeSw3NYY-yqUNomNKPrxNM
+
+### Get post comments
+GET http://localhost:5000/api/comments/post/98bc8631-53bc-4c59-a62a-db656c261233
+
+### Create comment
+POST http://localhost:5000/api/comments/post/98bc8631-53bc-4c59-a62a-db656c261233
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzYyMzUsImV4cCI6MTc4NzY4MTAzNX0.g36d1_URGaCjkzj11_kq1CeSw3NYY-yqUNomNKPrxNM
+
+{
+  "text": "This is a test comment."
+}
+
+### Delete comment
+DELETE http://localhost:5000/api/comments/0bb3ffa0-37c3-40a7-a43d-1a2a98469bca
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzYyMzUsImV4cCI6MTc4NzY4MTAzNX0.g36d1_URGaCjkzj11_kq1CeSw3NYY-yqUNomNKPrxNM
+
+### Get all communities
+GET http://localhost:5000/api/communities
+
+### Get single community
+GET http://localhost:5000/api/communities/6873ab14-781d-4386-b064-de9061228a64
+
+### Create community
+POST http://localhost:5000/api/communities
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzYyMzUsImV4cCI6MTc4NzY4MTAzNX0.g36d1_URGaCjkzj11_kq1CeSw3NYY-yqUNomNKPrxNM
+
+{
+  "name": "Technology",
+  "description": "Discussion about technology and programming.",
+  "category": "Technology",
+  "featured": false
+}
+
+### Update community
+PATCH http://localhost:5000/api/communities/36204dfe-5199-45ef-b0cb-c15eeef22839
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzYyMzUsImV4cCI6MTc4NzY4MTAzNX0.g36d1_URGaCjkzj11_kq1CeSw3NYY-yqUNomNKPrxNM
+
+{
+  "description": "Updated technology and programming discussions."
+}
+
+### Join community
+POST http://localhost:5000/api/communities/36204dfe-5199-45ef-b0cb-c15eeef22839/join
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzYyMzUsImV4cCI6MTc4NzY4MTAzNX0.g36d1_URGaCjkzj11_kq1CeSw3NYY-yqUNomNKPrxNM
+
+### Leave community
+DELETE http://localhost:5000/api/communities/36204dfe-5199-45ef-b0cb-c15eeef22839/leave
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzYyMzUsImV4cCI6MTc4NzY4MTAzNX0.g36d1_URGaCjkzj11_kq1CeSw3NYY-yqUNomNKPrxNM
+
+### Get conversations
+GET http://localhost:5000/api/messages/conversations
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzYyMzUsImV4cCI6MTc4NzY4MTAzNX0.g36d1_URGaCjkzj11_kq1CeSw3NYY-yqUNomNKPrxNM
+
+### Get messages
+GET http://localhost:5000/api/messages/conversations/a623f896-676e-4784-94fe-eae518e38129
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzYyMzUsImV4cCI6MTc4NzY4MTAzNX0.g36d1_URGaCjkzj11_kq1CeSw3NYY-yqUNomNKPrxNM
+
+### Send message
+POST http://localhost:5000/api/messages
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzkzODksImV4cCI6MTc4NzY4NDE4OX0.t-1FcnBQVyBEuRWxLqfJbv15B80pmxd9Xrr8OTN5FRw
+
+{
+  "conversationId": "a623f896-676e-4784-94fe-eae518e38129",
+  "text": "Testing the Community Forum messaging system."
+}
+
+### Get notifications
+GET http://localhost:5000/api/notifications
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzkzODksImV4cCI6MTc4NzY4NDE4OX0.t-1FcnBQVyBEuRWxLqfJbv15B80pmxd9Xrr8OTN5FRw
+
+### Mark notification as read
+PATCH http://localhost:5000/api/notifications/771d36fe-c251-4ac9-8970-8732fae8e4d8/read
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzkzODksImV4cCI6MTc4NzY4NDE4OX0.t-1FcnBQVyBEuRWxLqfJbv15B80pmxd9Xrr8OTN5FRw
+
+### Mark all notifications as read
+PATCH http://localhost:5000/api/notifications/read-all
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzkzODksImV4cCI6MTc4NzY4NDE4OX0.t-1FcnBQVyBEuRWxLqfJbv15B80pmxd9Xrr8OTN5FRw
