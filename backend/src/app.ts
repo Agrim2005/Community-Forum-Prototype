@@ -29,9 +29,12 @@ app.use("/api/communities", communityRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/notifications", notificationRoutes);
 
-app.use(notFoundHandler);
-app.use(errorHandler);
+app.use("/api/notifications", notificationRoutes);
+
 app.use("/api/likes", likeRoutes);
 app.use("/api/bookmarks", bookmarkRoutes);
+
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 export default app;

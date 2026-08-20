@@ -4,7 +4,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button, Card, Input } from "@/components/ui";
 
+import { registerUser } from "@/services/auth.service";
 import { registerSchema } from "@/utils/validation";
+
 import type { RegisterFormData } from "@/types/auth.types";
 
 const RegisterPage = () => {
@@ -18,13 +20,26 @@ const RegisterPage = () => {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = async (data: RegisterFormData) => {
-    console.log(data);
+  const onSubmit = async (
+    data: RegisterFormData,
+  ) => {
+    try {
+      console.log("REGISTER SUBMITTED:", data);
 
-    // Simulate registration
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+      const user = await registerUser(data);
 
-    navigate("/login");
+      console.log(
+        "REGISTER SUCCESS:",
+        user,
+      );
+
+      navigate("/login");
+    } catch (error) {
+      console.error(
+        "REGISTRATION FAILED:",
+        error,
+      );
+    }
   };
 
   return (
@@ -43,6 +58,13 @@ const RegisterPage = () => {
             placeholder="Enter your full name"
             error={errors.name?.message}
             {...register("name")}
+          />
+
+          <Input
+            label="Username"
+            placeholder="Enter your username"
+            error={errors.username?.message}
+            {...register("username")}
           />
 
           <Input
@@ -71,6 +93,7 @@ const RegisterPage = () => {
           <Button type="submit">
             Register
           </Button>
+
           <p className="text-center text-sm">
             Already have an account?{" "}
             <button

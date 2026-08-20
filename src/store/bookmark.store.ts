@@ -1,37 +1,67 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
-import type { Post } from "@/types/post.types";
+import {
+  addBookmark as addBookmarkRequest,
+  getBookmarks,
+  removeBookmark as removeBookmarkRequest,
+} from "@/services/bookmark.service";
 
 interface BookmarkStore {
-  bookmarks: Post[];
+  bookmarkIds: string[];
+  loading: boolean;
 
-  addBookmark: (post: Post) => void;
+  fetchBookmarks: () => Promise<void>;
 
-  removeBookmark: (id: string) => void;
+  addBookmark: (postId: string) => Promise<void>;
 
-  isBookmarked: (id: string) => boolean;
+  removeBookmark: (postId: string) => Promise<void>;
+
+  isBookmarked: (postId: string) => boolean;
 }
 
-export const useBookmarkStore = create<BookmarkStore>()(
-  persist(
-    (set, get) => ({
-      bookmarks: [],
+export const useBookmarkStore = create<BookmarkStore>(
+  (set, get) => ({
+    bookmarkIds: [],
+    loading: false,
 
-      addBookmark: (post) =>
-        set((state) => ({
-          bookmarks: [...state.bookmarks, post],
-        })),
+    fetchBookmarks: async () => {
+      set({ loading: true });
 
-      removeBookmark: (id) =>
-        set((state) => ({
-          bookmarks: state.bookmarks.filter((post) => post.id !== id),
-        })),
+      try {
+        const bookmarks = await getBookmarks();
 
-      isBookmarked: (id) => get().bookmarks.some((post) => post.id === id),
-    }),
-    {
-      name: "bookmarks-storage",
+        set({
+          bookmarkIds: bookmarks.map(
+            (bookmark) => bookmark.postId,
+          ),
+        });
+      } finally {
+        set({ loading: false });
+      }
     },
-  ),
+
+    addBookmark: async (postId) => {
+      await addBookmarkRequest(postId);
+
+      set((state) => ({
+        bookmarkIds: [
+          ...state.bookmarkIds,
+          postId,
+        ],
+      }));
+    },
+
+    removeBookmark: async (postId) => {
+      await removeBookmarkRequest(postId);
+
+      set((state) => ({
+        bookmarkIds: state.bookmarkIds.filter(
+          (id) => id !== postId,
+        ),
+      }));
+    },
+
+    isBookmarked: (postId) =>
+      get().bookmarkIds.includes(postId),
+  }),
 );

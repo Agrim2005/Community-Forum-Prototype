@@ -13,3 +13,7 @@ export interface Conversation {
   isOnline: boolean;
   messages: Message[];
 }
+
+export interface CreateConversationRequest {
+  userId: string;
+}

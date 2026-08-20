@@ -5,6 +5,7 @@ export interface LoginFormData {
 
 export interface RegisterFormData {
   name: string;
+  username: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -13,14 +14,14 @@ export interface RegisterFormData {
 export interface User {
   id: string;
   name: string;
+  username: string;
   email: string;
-  avatar?: string;
+  avatar: string | null;
 }
 
 export interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
-
-  login: (user: User) => void;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
 }

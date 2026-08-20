@@ -3,8 +3,8 @@ POST http://localhost:5000/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@communityforum.com",
-  "password": "Password123!"
+  "email": "aanya@gmail.com",
+  "password": "Aanya123"
 }
 
 ### Get all posts
@@ -88,11 +88,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1O
 
 ### Get conversations
 GET http://localhost:5000/api/messages/conversations
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzYyMzUsImV4cCI6MTc4NzY4MTAzNX0.g36d1_URGaCjkzj11_kq1CeSw3NYY-yqUNomNKPrxNM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMWQ5MDk3Yi1hMWEwLTQ4YzUtYTJjOC0wNmM4OGY4MmQ2NzkiLCJpYXQiOjE3ODcyNTEzMDEsImV4cCI6MTc4Nzg1NjEwMX0.8rY-_dJXwPRG0b-4Ix04mk8xVgB-SHhF2R20GGQVrnM
 
 ### Get messages
 GET http://localhost:5000/api/messages/conversations/a623f896-676e-4784-94fe-eae518e38129
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzYyMzUsImV4cCI6MTc4NzY4MTAzNX0.g36d1_URGaCjkzj11_kq1CeSw3NYY-yqUNomNKPrxNM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcyNTA4ODYsImV4cCI6MTc4Nzg1NTY4Nn0.6ayPZ-QCF12WG5G07WV48WmEXd6SNsmroibwywlAAh0
 
 ### Send message
 POST http://localhost:5000/api/messages
@@ -115,3 +115,42 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1O
 ### Mark all notifications as read
 PATCH http://localhost:5000/api/notifications/read-all
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzkzODksImV4cCI6MTc4NzY4NDE4OX0.t-1FcnBQVyBEuRWxLqfJbv15B80pmxd9Xrr8OTN5FRw
+
+### Get post likes
+GET http://localhost:5000/api/likes/post/599fc5db-b37a-4e9c-b6ab-c65133a3d208
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzkzODksImV4cCI6MTc4NzY4NDE4OX0.t-1FcnBQVyBEuRWxLqfJbv15B80pmxd9Xrr8OTN5FRw
+
+### Like post
+POST http://localhost:5000/api/likes/post/599fc5db-b37a-4e9c-b6ab-c65133a3d208
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzkzODksImV4cCI6MTc4NzY4NDE4OX0.t-1FcnBQVyBEuRWxLqfJbv15B80pmxd9Xrr8OTN5FRw
+
+### Unlike post
+DELETE http://localhost:5000/api/likes/post/599fc5db-b37a-4e9c-b6ab-c65133a3d208
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzkzODksImV4cCI6MTc4NzY4NDE4OX0.t-1FcnBQVyBEuRWxLqfJbv15B80pmxd9Xrr8OTN5FRw
+
+### Get post bookmarks
+GET http://localhost:5000/api/bookmarks/post/599fc5db-b37a-4e9c-b6ab-c65133a3d208
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzkzODksImV4cCI6MTc4NzY4NDE4OX0.t-1FcnBQVyBEuRWxLqfJbv15B80pmxd9Xrr8OTN5FRw
+
+### Bookmark post
+POST http://localhost:5000/api/bookmarks/post/599fc5db-b37a-4e9c-b6ab-c65133a3d208
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzkzODksImV4cCI6MTc4NzY4NDE4OX0.t-1FcnBQVyBEuRWxLqfJbv15B80pmxd9Xrr8OTN5FRw
+
+### Get post bookmarks again
+GET http://localhost:5000/api/bookmarks/post/599fc5db-b37a-4e9c-b6ab-c65133a3d208
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzkzODksImV4cCI6MTc4NzY4NDE4OX0.t-1FcnBQVyBEuRWxLqfJbv15B80pmxd9Xrr8OTN5FRw
+
+### Remove bookmark
+DELETE http://localhost:5000/api/bookmarks/post/599fc5db-b37a-4e9c-b6ab-c65133a3d208
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzkzODksImV4cCI6MTc4NzY4NDE4OX0.t-1FcnBQVyBEuRWxLqfJbv15B80pmxd9Xrr8OTN5FRw
+
+### Get post bookmarks final
+GET http://localhost:5000/api/bookmarks/post/599fc5db-b37a-4e9c-b6ab-c65133a3d208
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwYWM1ODM4ZS1hMGNhLTRlNTMtYjdkMy04Y2U3MWNhZDM3ZTEiLCJpYXQiOjE3ODcwNzkzODksImV4cCI6MTc4NzY4NDE4OX0.t-1FcnBQVyBEuRWxLqfJbv15B80pmxd9Xrr8OTN5FRw
+
+POST http://localhost:5000/api/messages/conversations 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiMWQ5MDk3Yi1hMWEwLTQ4YzUtYTJjOC0wNmM4OGY4MmQ2NzkiLCJpYXQiOjE3ODcyNTI5MjUsImV4cCI6MTc4Nzg1NzcyNX0.CFXbkwwTtVi3UhWvk6HKbmGPrxkKa6SXpeXf8Rt-1uQ
+Content-Type: application/json
+{
+  "userId": "55c22737-476d-408b-b938-20998d8ef8fb"
+}

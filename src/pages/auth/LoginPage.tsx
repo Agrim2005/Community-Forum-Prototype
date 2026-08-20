@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Card, Input } from "@/components/ui";
 import { loginSchema } from "@/utils/validation";
 import type { LoginFormData } from "@/types/auth.types";
-import { loginUser } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
 
 const LoginPage = () => {
@@ -26,8 +25,7 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const user = await loginUser(data);
-      login(user);
+      await login(data.email, data.password);
       navigate("/");
     } catch (error) {
       console.error(error);

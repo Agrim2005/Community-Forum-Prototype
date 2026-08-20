@@ -87,3 +87,37 @@ export const sendMessage = async (
     },
   });
 };
+
+export const createConversation = async (
+  userId: string,
+  otherUserId: string,
+) => {
+  return prisma.conversation.create({
+    data: {
+      participants: {
+        create: [
+          {
+            userId,
+          },
+          {
+            userId: otherUserId,
+          },
+        ],
+      },
+    },
+    include: {
+      participants: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              username: true,
+              avatar: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};

@@ -1,74 +1,66 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
-import { posts as initialPosts } from "@/data/posts";
+import {
+  createPost,
+  deletePost,
+  getPosts,
+  updatePost,
+} from "@/services/post.service";
 
 import type { Post } from "@/types/post.types";
-import type { User } from "@/types/auth.types";
 
 interface PostStore {
   posts: Post[];
+  loading: boolean;
 
-  addPost: (content: string, user: User) => void;
+  fetchPosts: () => Promise<void>;
 
-  deletePost: (id: string) => void;
+  addPost: (content: string) => Promise<void>;
 
-  editPost: (id: string, content: string) => void;
+  deletePost: (id: string) => Promise<void>;
+
+  editPost: (id: string, content: string) => Promise<void>;
 }
 
-export const usePostStore = create<PostStore>()(
-  persist(
-    (set) => ({
-      posts: initialPosts,
+export const usePostStore = create<PostStore>((set) => ({
+  posts: [],
+  loading: false,
 
-      addPost: (content, user) =>
-        set((state) => ({
-          posts: [
-            {
-              id: crypto.randomUUID(),
+  fetchPosts: async () => {
+    set({ loading: true });
 
-              author: {
-                id: user.id,
-                name: user.name,
-                avatar: user.avatar ?? "https://i.pravatar.cc/150?img=8",
-              },
+    try {
+      const posts = await getPosts();
 
-              content,
+      set({ posts });
+    } finally {
+      set({ loading: false });
+    }
+  },
 
-              createdAt: "Just now",
+  addPost: async (content) => {
+    const post = await createPost(content);
 
-              likes: 0,
-              comments: 0,
+    set((state) => ({
+      posts: [post, ...state.posts],
+    }));
+  },
 
-              isLiked: false,
-              isBookmarked: false,
+  deletePost: async (id) => {
+    await deletePost(id);
 
-              commentList: [],
-            },
+    set((state) => ({
+      posts: state.posts.filter((post) => post.id !== id),
+    }));
+  },
 
-            ...state.posts,
-          ],
-        })),
+  editPost: async (id, content) => {
+    const updatedPost = await updatePost(id, content);
 
-      deletePost: (id) =>
-        set((state) => ({
-          posts: state.posts.filter((post) => post.id !== id),
-        })),
-
-      editPost: (id, content) =>
-        set((state) => ({
-          posts: state.posts.map((post) =>
-            post.id === id
-              ? {
-                  ...post,
-                  content,
-                }
-              : post,
-          ),
-        })),
-    }),
-    {
-      name: "posts-storage",
-    },
-  ),
-);
+    set((state) => ({
+      posts: state.posts.map((post) =>
+        post.id === id ? updatedPost : post,
+      ),
+    }));
+  },
+}));

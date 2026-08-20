@@ -12,6 +12,15 @@ import type { Post } from "@/types/post.types";
 import { useBookmarkStore } from "@/store/bookmark.store";
 import { useAuthStore } from "@/store/auth.store";
 import { usePostStore } from "@/store/post.store";
+import {
+  addLike,
+  removeLike,
+} from "@/services/like.service";
+
+import {
+  createComment,
+  deleteComment,
+} from "@/services/comment.service";
 
 interface PostCardProps {
   post: Post;
@@ -27,6 +36,7 @@ const PostCard = ({
   const {
     deletePost,
     editPost,
+    fetchPosts
   } = usePostStore();
 
   const {
@@ -44,6 +54,24 @@ const PostCard = ({
   const [showComments, setShowComments] =
     useState(false);
 
+  const [commentText, setCommentText] = useState("");
+
+  const handleAddComment = async () => {
+    if (!commentText.trim()) return;
+
+    try {
+      await createComment(
+        post.id,
+        commentText,
+      );
+
+      setCommentText("");
+      await fetchPosts();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const [isEditing, setIsEditing] =
     useState(false);
 
@@ -55,43 +83,74 @@ const PostCard = ({
   const bookmarked =
     isBookmarked(post.id);
 
-  const handleLike = () => {
-    if (liked) {
-      setLikes((prev) => prev - 1);
-    } else {
-      setLikes((prev) => prev + 1);
-    }
+  const handleLike = async () => {
+    try {
+      if (liked) {
+        await removeLike(post.id);
 
-    setLiked(!liked);
+        setLikes((prev) => prev - 1);
+        setLiked(false);
+      } else {
+        await addLike(post.id);
+
+        setLikes((prev) => prev + 1);
+        setLiked(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleBookmark = () => {
-    if (bookmarked) {
-      removeBookmark(post.id);
-    } else {
-      addBookmark(post);
+  const handleBookmark = async () => {
+    try {
+      if (bookmarked) {
+        await removeBookmark(post.id);
+      } else {
+        await addBookmark(post.id);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  const handleDelete = () => {
+  const handleDeleteComment = async (
+    commentId: string,
+  ) => {
+    try {
+      await deleteComment(commentId);
+      await fetchPosts();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDelete = async () => {
     const confirmed = window.confirm(
-      "This action cannot be undone.\n\nDo you want to delete this post?"
+      "This action cannot be undone.\n\nDo you want to delete this post?",
     );
 
     if (!confirmed) return;
 
-    deletePost(post.id);
+    try {
+      await deletePost(post.id);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!editedContent.trim()) return;
 
-    editPost(
-      post.id,
-      editedContent
-    );
+    try {
+      await editPost(
+        post.id,
+        editedContent,
+      );
 
-    setIsEditing(false);
+      setIsEditing(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleCancel = () => {
@@ -108,9 +167,7 @@ const PostCard = ({
   return (
     <Card>
       <div className="space-y-5">
-
         {/* Header */}
-
         <div
           className="
             flex
@@ -161,7 +218,6 @@ const PostCard = ({
         </div>
 
         {/* Post Content */}
-
         {isEditing ? (
           <div>
             <p
@@ -217,7 +273,6 @@ const PostCard = ({
         )}
 
         {/* Footer */}
-
         <div
           className="
             border-t
@@ -248,7 +303,6 @@ const PostCard = ({
           </div>
 
           {/* Comments */}
-
           {showComments && (
             <div
               className="
@@ -260,6 +314,39 @@ const PostCard = ({
                 space-y-3
               "
             >
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={commentText}
+                  onChange={(e) =>
+                    setCommentText(e.target.value)
+                  }
+                  placeholder="Write a comment..."
+                  className="
+                    flex-1
+                    border
+                    border-gray-300
+                    dark:border-gray-600
+                    rounded-lg
+                    px-3
+                    py-2
+                    bg-white
+                    dark:bg-gray-900
+                    text-gray-900
+                    dark:text-white
+                    outline-none
+                    focus:ring-2
+                    focus:ring-purple-500
+                  "
+                />
+
+                <Button
+                  onClick={handleAddComment}
+                >
+                  Send
+                </Button>
+              </div>
+
               {post.commentList.length > 0 ? (
                 post.commentList.map(
                   (comment) => (
@@ -275,25 +362,38 @@ const PostCard = ({
                         p-3
                       "
                     >
-                      <p
-                        className="
-                          font-semibold
-                          text-gray-900
-                          dark:text-white
-                        "
-                      >
-                        {comment.author}
-                      </p>
-
-                      <p
-                        className="
-                          text-gray-700
-                          dark:text-gray-200
-                          mt-1
-                        "
-                      >
-                        {comment.text}
-                      </p>
+                      <div className="flex justify-between items-start gap-4">
+                        <div>
+                          <p
+                            className="
+                              font-semibold
+                              text-gray-900
+                              dark:text-white
+                            "
+                          >
+                            {comment.author}
+                          </p>
+                          <p
+                            className="
+                              text-gray-700
+                              dark:text-gray-200
+                              mt-1
+                            "
+                          >
+                            {comment.text}
+                          </p>
+                        </div>
+                        {comment.author === user?.name && (
+                          <Button
+                            variant="secondary"
+                            onClick={() =>
+                              handleDeleteComment(comment.id)
+                            }
+                          >
+                            Delete
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   )
                 )
@@ -312,7 +412,6 @@ const PostCard = ({
           )}
 
           {/* Main Actions */}
-
           <div
             className="
               grid
@@ -354,7 +453,6 @@ const PostCard = ({
           </div>
 
           {/* Author Actions */}
-
           {post.author.id === user?.id && (
             <div className="mt-4 space-y-3">
               {isEditing ? (
@@ -401,4 +499,4 @@ const PostCard = ({
   );
 };
 
-export default PostCard;  
+export default PostCard;

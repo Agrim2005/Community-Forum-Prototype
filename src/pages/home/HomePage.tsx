@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { usePostStore } from "@/store/post.store";
 import { useAuthStore } from "@/store/auth.store";
 
@@ -6,22 +8,34 @@ import {
   PostCard,
 } from "@/components/common";
 
+import { useBookmarkStore } from "@/store/bookmark.store";
+
 const HomePage = () => {
   const user = useAuthStore(
-    (state) => state.user
+    (state) => state.user,
   );
 
   const {
     posts,
     addPost,
+    fetchPosts,
   } = usePostStore();
 
-  const handleAddPost = (
-    content: string
+  const fetchBookmarks = useBookmarkStore(
+    (state) => state.fetchBookmarks,
+  );
+
+  useEffect(() => {
+    void fetchPosts();
+    void fetchBookmarks();
+  }, [fetchPosts, fetchBookmarks]);
+
+  const handleAddPost = async (
+    content: string,
   ) => {
     if (!user) return;
 
-    addPost(content, user);
+    await addPost(content);
   };
 
   return (

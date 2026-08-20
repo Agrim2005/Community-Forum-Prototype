@@ -12,27 +12,96 @@ import {
 } from "@/components/common";
 
 import {
-  conversations as initialConversations,
-} from "@/data/messages";
+  createConversation,
+  getConversations,
+  getMessages,
+  sendMessage,
+  type ApiConversation,
+  type ApiMessage,
+} from "@/services/message.service";
+
+import { useAuthStore } from "@/store/auth.store";
 
 import type {
   Conversation,
   Message,
 } from "@/types/message.types";
 
+const formatTime = (
+  date: string,
+) => {
+  return new Date(
+    date,
+  ).toLocaleTimeString(
+    [],
+    {
+      hour: "2-digit",
+      minute: "2-digit",
+    },
+  );
+};
+
+const convertMessage = (
+  message: ApiMessage,
+  currentUserId: string,
+): Message => ({
+  id: message.id,
+
+  sender:
+    message.senderId === currentUserId
+      ? "You"
+      : message.sender.name,
+
+  text: message.text,
+
+  time: formatTime(
+    message.createdAt,
+  ),
+
+  isMine:
+    message.senderId === currentUserId,
+});
+
+const convertConversation = (
+  conversation: ApiConversation,
+  currentUserId: string,
+): Conversation => {
+  const otherParticipant =
+    conversation.participants.find(
+      (participant) =>
+        participant.userId !== currentUserId,
+    );
+
+  return {
+    id: conversation.id,
+
+    name:
+      otherParticipant?.user.name ??
+      "Unknown User",
+
+    avatar:
+      otherParticipant?.user.avatar ??
+      "https://i.pravatar.cc/150?img=1",
+
+    isOnline: false,
+
+    messages: [],
+  };
+};
+
 const MessagesPage = () => {
   const [
     conversations,
     setConversations,
-  ] = useState<Conversation[]>(
-    initialConversations
-  );
+  ] = useState<Conversation[]>([]);
 
   const [
     selectedConversationId,
     setSelectedConversationId,
-  ] = useState(
-    initialConversations[0].id
+  ] = useState<string | null>(null);
+
+  const user = useAuthStore(
+    (state) => state.user,
   );
 
   const [
@@ -48,11 +117,96 @@ const MessagesPage = () => {
   const bottomRef =
     useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    const loadConversations = async () => {
+      if (!user) return;
+
+      try {
+        const apiConversations =
+          await getConversations();
+
+        const formattedConversations =
+          apiConversations.map(
+            (conversation) =>
+              convertConversation(
+                conversation,
+                user.id,
+              ),
+          );
+
+        setConversations(
+          formattedConversations,
+        );
+
+        if (
+          formattedConversations.length > 0
+        ) {
+          setSelectedConversationId(
+            formattedConversations[0].id,
+          );
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    void loadConversations();
+  }, [user]);
+
+  useEffect(() => {
+    const loadMessages = async () => {
+      if (
+        !selectedConversationId ||
+        !user
+      ) {
+        return;
+      }
+
+      try {
+        const apiMessages =
+          await getMessages(
+            selectedConversationId,
+          );
+
+        const formattedMessages =
+          apiMessages.map(
+            (message) =>
+              convertMessage(
+                message,
+                user.id,
+              ),
+          );
+
+        setConversations(
+          (currentConversations) =>
+            currentConversations.map(
+              (conversation) =>
+                conversation.id ===
+                selectedConversationId
+                  ? {
+                      ...conversation,
+                      messages:
+                        formattedMessages,
+                    }
+                  : conversation,
+            ),
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    void loadMessages();
+  }, [
+    selectedConversationId,
+    user,
+  ]);
+
   const selectedConversation =
     conversations.find(
       (conversation) =>
         conversation.id ===
-        selectedConversationId
+        selectedConversationId,
     );
 
   useEffect(() => {
@@ -70,69 +224,100 @@ const MessagesPage = () => {
           conversation.name
             .toLowerCase()
             .includes(
-              searchText.toLowerCase()
-            )
+              searchText.toLowerCase(),
+            ),
       );
     }, [
       conversations,
       searchText,
     ]);
 
-  const handleSend = () => {
-    if (!text.trim()) return;
+  const handleSend = async () => {
+    if (
+      !text.trim() ||
+      !selectedConversationId ||
+      !user
+    ) {
+      return;
+    }
 
-    const newMessage: Message = {
-      id: crypto.randomUUID(),
+    try {
+      const newApiMessage =
+        await sendMessage(
+          selectedConversationId,
+          text.trim(),
+        );
 
-      sender: "You",
+      const newMessage =
+        convertMessage(
+          newApiMessage,
+          user.id,
+        );
 
-      text: text.trim(),
+      setConversations(
+        (currentConversations) =>
+          currentConversations.map(
+            (conversation) =>
+              conversation.id ===
+              selectedConversationId
+                ? {
+                    ...conversation,
 
-      time: new Date().toLocaleTimeString(
-        [],
-        {
-          hour: "2-digit",
-          minute: "2-digit",
-        }
-      ),
+                    messages: [
+                      ...conversation.messages,
+                      newMessage,
+                    ],
+                  }
+                : conversation,
+          ),
+      );
 
-      isMine: true,
-    };
-
-    setConversations(
-      (currentConversations) =>
-        currentConversations.map(
-          (conversation) =>
-            conversation.id ===
-            selectedConversationId
-              ? {
-                  ...conversation,
-
-                  messages: [
-                    ...conversation.messages,
-                    newMessage,
-                  ],
-                }
-              : conversation
-        )
-    );
-
-    setText("");
+      setText("");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const getLastMessage = (
-    conversation: Conversation
+    conversation: Conversation,
   ) => {
-    const lastMessage =
-      conversation.messages[
-        conversation.messages.length - 1
-      ];
-
-    return lastMessage;
+    return conversation.messages[
+      conversation.messages.length - 1
+    ];
   };
 
   if (!selectedConversation) {
-    return null;
+    return (
+      <div
+        className="
+          max-w-7xl
+          mx-auto
+          px-4
+          sm:px-6
+          py-6
+          sm:py-10
+        "
+      >
+        <div
+          className="
+            p-10
+            text-center
+            text-gray-500
+            bg-white
+            dark:bg-gray-950
+            rounded-2xl
+            shadow-lg
+            border
+            border-gray-200
+            dark:border-gray-800
+          "
+        >
+          <p>
+            No conversations found.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -166,8 +351,6 @@ const MessagesPage = () => {
             min-h-[650px]
           "
         >
-          {/* Conversation Sidebar */}
-
           <aside
             className="
               border-b
@@ -209,8 +392,6 @@ const MessagesPage = () => {
                 Chat with your connections.
               </p>
 
-              {/* Search */}
-
               <div className="relative mt-5">
                 <span
                   className="
@@ -228,7 +409,7 @@ const MessagesPage = () => {
                   value={searchText}
                   onChange={(e) =>
                     setSearchText(
-                      e.target.value
+                      e.target.value,
                     )
                   }
                   placeholder="Search messages..."
@@ -255,8 +436,6 @@ const MessagesPage = () => {
               </div>
             </div>
 
-            {/* Conversation List */}
-
             <div
               className="
                 p-3
@@ -274,7 +453,7 @@ const MessagesPage = () => {
 
                   const lastMessage =
                     getLastMessage(
-                      conversation
+                      conversation,
                     );
 
                   return (
@@ -283,7 +462,7 @@ const MessagesPage = () => {
                       type="button"
                       onClick={() => {
                         setSelectedConversationId(
-                          conversation.id
+                          conversation.id,
                         );
 
                         setText("");
@@ -319,8 +498,6 @@ const MessagesPage = () => {
                           gap-3
                         "
                       >
-                        {/* Avatar */}
-
                         <div
                           className="
                             relative
@@ -341,26 +518,7 @@ const MessagesPage = () => {
                               object-cover
                             "
                           />
-
-                          {conversation.isOnline && (
-                            <span
-                              className="
-                                absolute
-                                bottom-0
-                                right-0
-                                w-3
-                                h-3
-                                rounded-full
-                                bg-green-500
-                                border-2
-                                border-white
-                                dark:border-gray-950
-                              "
-                            />
-                          )}
                         </div>
-
-                        {/* Conversation Details */}
 
                         <div
                           className="
@@ -383,9 +541,7 @@ const MessagesPage = () => {
                                 truncate
                               "
                             >
-                              {
-                                conversation.name
-                              }
+                              {conversation.name}
                             </h3>
 
                             <span
@@ -411,13 +567,14 @@ const MessagesPage = () => {
                           >
                             {lastMessage?.isMine
                               ? `You: ${lastMessage.text}`
-                              : lastMessage?.text}
+                              : lastMessage?.text ??
+                                "No messages yet."}
                           </p>
                         </div>
                       </div>
                     </button>
                   );
-                }
+                },
               )}
 
               {filteredConversations.length ===
@@ -436,8 +593,6 @@ const MessagesPage = () => {
             </div>
           </aside>
 
-          {/* Active Conversation */}
-
           <section
             className="
               flex
@@ -447,8 +602,6 @@ const MessagesPage = () => {
               dark:bg-gray-950
             "
           >
-            {/* Chat Header */}
-
             <div
               className="
                 flex
@@ -493,47 +646,21 @@ const MessagesPage = () => {
                       dark:text-white
                     "
                   >
-                    {
-                      selectedConversation.name
-                    }
+                    {selectedConversation.name}
                   </h2>
 
                   <p
-                    className={`
+                    className="
                       text-sm
-
-                      ${
-                        selectedConversation.isOnline
-                          ? "text-green-500"
-                          : `
-                              text-gray-500
-                              dark:text-gray-400
-                            `
-                      }
-                    `}
+                      text-gray-500
+                      dark:text-gray-400
+                    "
                   >
-                    {selectedConversation.isOnline
-                      ? "● Online"
-                      : "Offline"}
+                    Offline
                   </p>
                 </div>
               </div>
-
-              <button
-                type="button"
-                aria-label="More options"
-                className="
-                  text-2xl
-                  text-gray-600
-                  dark:text-gray-300
-                  cursor-pointer
-                "
-              >
-                ⋮
-              </button>
             </div>
-
-            {/* Chat Messages */}
 
             <div
               className="
@@ -555,13 +682,11 @@ const MessagesPage = () => {
                     key={message.id}
                     message={message}
                   />
-                )
+                ),
               )}
 
               <div ref={bottomRef} />
             </div>
-
-            {/* Message Input */}
 
             <div
               className="
@@ -588,10 +713,8 @@ const MessagesPage = () => {
                     setText(e.target.value)
                   }
                   onKeyDown={(e) => {
-                    if (
-                      e.key === "Enter"
-                    ) {
-                      handleSend();
+                    if (e.key === "Enter") {
+                      void handleSend();
                     }
                   }}
                   placeholder={`Message ${selectedConversation.name}...`}
@@ -617,7 +740,9 @@ const MessagesPage = () => {
                 />
 
                 <Button
-                  onClick={handleSend}
+                  onClick={() => {
+                    void handleSend();
+                  }}
                   disabled={!text.trim()}
                 >
                   Send

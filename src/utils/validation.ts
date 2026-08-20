@@ -1,12 +1,11 @@
 import { z } from "zod";
 
 export const loginSchema = z.object({
-  email: z
-    .email("Please enter a valid email address"),
+  email: z.email("Please enter a valid email address"),
 
   password: z
     .string()
-    .min(6, "Password must contain at least 6 characters"),
+    .min(8, "Password must contain at least 8 characters"),
 });
 
 export const registerSchema = z
@@ -14,6 +13,10 @@ export const registerSchema = z
     name: z
       .string()
       .min(3, "Name must contain at least 3 characters"),
+
+    username: z
+      .string()
+      .min(3, "Username must contain at least 3 characters"),
 
     email: z
       .email("Please enter a valid email"),
