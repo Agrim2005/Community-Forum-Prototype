@@ -23,8 +23,8 @@ const CreatePost = ({ onAddPost }: CreatePostProps) => {
             <div className="space-y-4">
                 <div className="flex items-center gap-3">
                     <Avatar
-                        src={user?.avatar}
-                        alt={user?.name}
+                        src={user?.avatar ?? undefined}
+                        alt={user?.name ?? "User"}
                     />
 
                     <div>
@@ -41,7 +41,7 @@ const CreatePost = ({ onAddPost }: CreatePostProps) => {
                 <p className="font-semibold mb-2">
                     Editing Post
                 </p>
-                
+
                 <textarea
                     value={content}
                     onChange={(e) => setContent(e.target.value)}

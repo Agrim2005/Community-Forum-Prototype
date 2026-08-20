@@ -12,7 +12,6 @@ import {
 } from "@/components/common";
 
 import {
-  createConversation,
   getConversations,
   getMessages,
   sendMessage,
