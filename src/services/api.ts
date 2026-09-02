@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://community-forum-prototype.onrender.com",
+  baseURL: "https://community-forum-prototype.onrender.com/api",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
