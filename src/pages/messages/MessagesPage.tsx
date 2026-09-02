@@ -7,9 +7,7 @@ import {
 
 import { Button } from "@/components/ui";
 
-import {
-  MessageBubble,
-} from "@/components/common";
+import { MessageBubble } from "@/components/common";
 
 import {
   getConversations,
@@ -26,18 +24,11 @@ import type {
   Message,
 } from "@/types/message.types";
 
-const formatTime = (
-  date: string,
-) => {
-  return new Date(
-    date,
-  ).toLocaleTimeString(
-    [],
-    {
-      hour: "2-digit",
-      minute: "2-digit",
-    },
-  );
+const formatTime = (date: string) => {
+  return new Date(date).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 };
 
 const convertMessage = (
@@ -45,18 +36,12 @@ const convertMessage = (
   currentUserId: string,
 ): Message => ({
   id: message.id,
-
   sender:
     message.senderId === currentUserId
       ? "You"
       : message.sender.name,
-
   text: message.text,
-
-  time: formatTime(
-    message.createdAt,
-  ),
-
+  time: formatTime(message.createdAt),
   isMine:
     message.senderId === currentUserId,
 });
@@ -73,17 +58,13 @@ const convertConversation = (
 
   return {
     id: conversation.id,
-
     name:
       otherParticipant?.user.name ??
       "Unknown User",
-
     avatar:
       otherParticipant?.user.avatar ??
       "https://i.pravatar.cc/150?img=1",
-
     isOnline: false,
-
     messages: [],
   };
 };
@@ -261,7 +242,6 @@ const MessagesPage = () => {
               selectedConversationId
                 ? {
                     ...conversation,
-
                     messages: [
                       ...conversation.messages,
                       newMessage,
@@ -287,30 +267,8 @@ const MessagesPage = () => {
 
   if (!selectedConversation) {
     return (
-      <div
-        className="
-          max-w-7xl
-          mx-auto
-          px-4
-          sm:px-6
-          py-6
-          sm:py-10
-        "
-      >
-        <div
-          className="
-            p-10
-            text-center
-            text-gray-500
-            bg-white
-            dark:bg-gray-950
-            rounded-2xl
-            shadow-lg
-            border
-            border-gray-200
-            dark:border-gray-800
-          "
-        >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+        <div className="p-10 text-center text-gray-500 bg-white dark:bg-gray-950 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-800">
           <p>
             No conversations found.
           </p>
@@ -320,86 +278,21 @@ const MessagesPage = () => {
   }
 
   return (
-    <div
-      className="
-        max-w-7xl
-        mx-auto
-        px-4
-        sm:px-6
-        py-6
-        sm:py-10
-      "
-    >
-      <div
-        className="
-          overflow-hidden
-          rounded-2xl
-          border
-          border-gray-200
-          dark:border-gray-800
-          bg-white
-          dark:bg-gray-950
-          shadow-lg
-        "
-      >
-        <div
-          className="
-            grid
-            grid-cols-1
-            lg:grid-cols-[320px_minmax(0,1fr)]
-            min-h-[650px]
-          "
-        >
-          <aside
-            className="
-              border-b
-              lg:border-b-0
-              lg:border-r
-              border-gray-200
-              dark:border-gray-800
-              bg-gray-50
-              dark:bg-gray-950
-            "
-          >
-            <div
-              className="
-                p-5
-                border-b
-                border-gray-200
-                dark:border-gray-800
-              "
-            >
-              <h1
-                className="
-                  text-2xl
-                  font-bold
-                  text-gray-900
-                  dark:text-white
-                "
-              >
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+      <div className="overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-lg">
+        <div className="grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] min-h-[650px]">
+          <aside className="border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950">
+            <div className="p-5 border-b border-gray-200 dark:border-gray-800">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                 Messages
               </h1>
 
-              <p
-                className="
-                  text-sm
-                  text-gray-600
-                  dark:text-gray-400
-                  mt-1
-                "
-              >
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                 Chat with your connections.
               </p>
 
               <div className="relative mt-5">
-                <span
-                  className="
-                    absolute
-                    left-3
-                    top-1/2
-                    -translate-y-1/2
-                  "
-                >
+                <span className="absolute left-3 top-1/2 -translate-y-1/2">
                   🔍
                 </span>
 
@@ -412,38 +305,12 @@ const MessagesPage = () => {
                     )
                   }
                   placeholder="Search messages..."
-                  className="
-                    w-full
-                    rounded-lg
-                    border
-                    border-gray-300
-                    dark:border-gray-700
-                    bg-white
-                    dark:bg-gray-900
-                    text-gray-900
-                    dark:text-white
-                    placeholder:text-gray-500
-                    dark:placeholder:text-gray-400
-                    pl-10
-                    pr-4
-                    py-3
-                    outline-none
-                    focus:ring-2
-                    focus:ring-purple-500
-                  "
+                  className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 pl-10 pr-4 py-3 outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
             </div>
 
-            <div
-              className="
-                p-3
-                space-y-2
-                max-h-[350px]
-                lg:max-h-[540px]
-                overflow-y-auto
-              "
-            >
+            <div className="p-3 space-y-2 max-h-[350px] lg:max-h-[540px] overflow-y-auto">
               {filteredConversations.map(
                 (conversation) => {
                   const isSelected =
@@ -463,7 +330,6 @@ const MessagesPage = () => {
                         setSelectedConversationId(
                           conversation.id,
                         );
-
                         setText("");
                       }}
                       className={`
@@ -474,7 +340,6 @@ const MessagesPage = () => {
                         border
                         transition
                         cursor-pointer
-
                         ${
                           isSelected
                             ? `
@@ -490,19 +355,8 @@ const MessagesPage = () => {
                         }
                       `}
                     >
-                      <div
-                        className="
-                          flex
-                          items-center
-                          gap-3
-                        "
-                      >
-                        <div
-                          className="
-                            relative
-                            shrink-0
-                          "
-                        >
+                      <div className="flex items-center gap-3">
+                        <div className="relative shrink-0">
                           <img
                             src={
                               conversation.avatar
@@ -510,60 +364,26 @@ const MessagesPage = () => {
                             alt={
                               conversation.name
                             }
-                            className="
-                              w-12
-                              h-12
-                              rounded-full
-                              object-cover
-                            "
+                            className="w-12 h-12 rounded-full object-cover"
                           />
                         </div>
 
-                        <div
-                          className="
-                            min-w-0
-                            flex-1
-                          "
-                        >
-                          <div
-                            className="
-                              flex
-                              justify-between
-                              gap-2
-                            "
-                          >
-                            <h3
-                              className="
-                                font-semibold
-                                text-gray-900
-                                dark:text-white
-                                truncate
-                              "
-                            >
-                              {conversation.name}
+                        <div className="min-w-0 flex-1">
+                          <div className="flex justify-between gap-2">
+                            <h3 className="font-semibold text-gray-900 dark:text-white truncate">
+                              {
+                                conversation.name
+                              }
                             </h3>
 
-                            <span
-                              className="
-                                text-xs
-                                text-purple-600
-                                dark:text-purple-400
-                                shrink-0
-                              "
-                            >
-                              {lastMessage?.time}
+                            <span className="text-xs text-purple-600 dark:text-purple-400 shrink-0">
+                              {
+                                lastMessage?.time
+                              }
                             </span>
                           </div>
 
-                          <p
-                            className="
-                              text-sm
-                              text-gray-500
-                              dark:text-gray-400
-                              truncate
-                              mt-1
-                            "
-                          >
+                          <p className="text-sm text-gray-500 dark:text-gray-400 truncate mt-1">
                             {lastMessage?.isMine
                               ? `You: ${lastMessage.text}`
                               : lastMessage?.text ??
@@ -578,50 +398,16 @@ const MessagesPage = () => {
 
               {filteredConversations.length ===
                 0 && (
-                <p
-                  className="
-                    text-center
-                    text-gray-500
-                    dark:text-gray-400
-                    py-8
-                  "
-                >
+                <p className="text-center text-gray-500 dark:text-gray-400 py-8">
                   No conversations found.
                 </p>
               )}
             </div>
           </aside>
 
-          <section
-            className="
-              flex
-              flex-col
-              min-w-0
-              bg-white
-              dark:bg-gray-950
-            "
-          >
-            <div
-              className="
-                flex
-                items-center
-                justify-between
-                gap-4
-                px-4
-                sm:px-6
-                py-4
-                border-b
-                border-gray-200
-                dark:border-gray-800
-              "
-            >
-              <div
-                className="
-                  flex
-                  items-center
-                  gap-3
-                "
-              >
+          <section className="flex flex-col min-w-0 bg-white dark:bg-gray-950">
+            <div className="flex items-center justify-between gap-4 px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+              <div className="flex items-center gap-3">
                 <img
                   src={
                     selectedConversation.avatar
@@ -629,52 +415,24 @@ const MessagesPage = () => {
                   alt={
                     selectedConversation.name
                   }
-                  className="
-                    w-11
-                    h-11
-                    rounded-full
-                    object-cover
-                  "
+                  className="w-11 h-11 rounded-full object-cover"
                 />
 
                 <div>
-                  <h2
-                    className="
-                      font-semibold
-                      text-gray-900
-                      dark:text-white
-                    "
-                  >
-                    {selectedConversation.name}
+                  <h2 className="font-semibold text-gray-900 dark:text-white">
+                    {
+                      selectedConversation.name
+                    }
                   </h2>
 
-                  <p
-                    className="
-                      text-sm
-                      text-gray-500
-                      dark:text-gray-400
-                    "
-                  >
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     Offline
                   </p>
                 </div>
               </div>
             </div>
 
-            <div
-              className="
-                flex-1
-                h-[450px]
-                lg:h-auto
-                min-h-[450px]
-                overflow-y-auto
-                p-4
-                sm:p-6
-                space-y-5
-                bg-gray-50
-                dark:bg-gray-900
-              "
-            >
+            <div className="flex-1 h-[450px] lg:h-auto min-h-[450px] overflow-y-auto p-4 sm:p-6 space-y-5 bg-gray-50 dark:bg-gray-900">
               {selectedConversation.messages.map(
                 (message) => (
                   <MessageBubble
@@ -687,24 +445,8 @@ const MessagesPage = () => {
               <div ref={bottomRef} />
             </div>
 
-            <div
-              className="
-                p-4
-                border-t
-                border-gray-200
-                dark:border-gray-800
-                bg-white
-                dark:bg-gray-950
-              "
-            >
-              <div
-                className="
-                  flex
-                  flex-col
-                  sm:flex-row
-                  gap-3
-                "
-              >
+            <div className="p-4 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="text"
                   value={text}
@@ -717,25 +459,7 @@ const MessagesPage = () => {
                     }
                   }}
                   placeholder={`Message ${selectedConversation.name}...`}
-                  className="
-                    flex-1
-                    min-w-0
-                    rounded-lg
-                    border
-                    border-gray-300
-                    dark:border-gray-700
-                    bg-white
-                    dark:bg-gray-900
-                    text-gray-900
-                    dark:text-white
-                    placeholder:text-gray-500
-                    dark:placeholder:text-gray-400
-                    px-4
-                    py-3
-                    outline-none
-                    focus:ring-2
-                    focus:ring-purple-500
-                  "
+                  className="flex-1 min-w-0 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 py-3 outline-none focus:ring-2 focus:ring-purple-500"
                 />
 
                 <Button
