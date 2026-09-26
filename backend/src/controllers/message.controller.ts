@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+
 import { HTTP_STATUS } from "../constants/index.js";
 
 import type {
@@ -18,16 +19,20 @@ export const createConversation = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  console.log(
-    "CREATE CONVERSATION ROUTE HIT",
-  );
-
-  console.log(req.body);
-
   const userId = res.locals.userId as string;
 
   const data =
     req.body as CreateConversationRequest;
+
+  if (data.userId === userId) {
+    res.status(HTTP_STATUS.BAD_REQUEST).json({
+      status: "error",
+      message:
+        "You cannot create a conversation with yourself",
+    });
+
+    return;
+  }
 
   const conversation =
     await createConversationService(

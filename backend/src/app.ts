@@ -1,6 +1,6 @@
 import express from "express";
-
 import cors from "cors";
+
 import likeRoutes from "./routes/like.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import commentRoutes from "./routes/comment.routes.js";
@@ -28,9 +28,6 @@ app.use("/api/comments", commentRoutes);
 app.use("/api/communities", communityRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/notifications", notificationRoutes);
-
-app.use("/api/notifications", notificationRoutes);
-
 app.use("/api/likes", likeRoutes);
 app.use("/api/bookmarks", bookmarkRoutes);
 

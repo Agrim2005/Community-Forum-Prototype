@@ -8,14 +8,20 @@ import {
 } from "../controllers/message.controller.js";
 
 import { authenticate } from "../middleware/auth.middleware.js";
+
 import { validate } from "../middleware/validation.middleware.js";
-import { sendMessageSchema } from "../utils/validation.js";
+
+import {
+  createConversationSchema,
+  sendMessageSchema,
+} from "../utils/validation.js";
 
 const router = Router();
 
 router.post(
   "/conversations",
   authenticate,
+  validate(createConversationSchema),
   createConversation,
 );
 

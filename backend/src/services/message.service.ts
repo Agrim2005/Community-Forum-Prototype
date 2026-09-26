@@ -1,5 +1,8 @@
 import { prisma } from "../config/database.js";
-import type { SendMessageRequest } from "../types/message.types.js";
+
+import type {
+  SendMessageRequest,
+} from "../types/message.types.js";
 
 export const getConversations = async (
   userId: string,
@@ -12,6 +15,7 @@ export const getConversations = async (
         },
       },
     },
+
     include: {
       participants: {
         include: {
@@ -25,6 +29,7 @@ export const getConversations = async (
           },
         },
       },
+
       messages: {
         orderBy: {
           createdAt: "desc",
@@ -32,6 +37,7 @@ export const getConversations = async (
         take: 1,
       },
     },
+
     orderBy: {
       updatedAt: "desc",
     },
@@ -59,6 +65,7 @@ export const getMessages = async (
     where: {
       conversationId,
     },
+
     include: {
       sender: {
         select: {
@@ -69,6 +76,7 @@ export const getMessages = async (
         },
       },
     },
+
     orderBy: {
       createdAt: "asc",
     },
@@ -79,19 +87,85 @@ export const sendMessage = async (
   userId: string,
   data: SendMessageRequest,
 ) => {
-  return prisma.message.create({
+  const message = await prisma.message.create({
     data: {
       text: data.text,
       senderId: userId,
       conversationId: data.conversationId,
     },
   });
+
+  await prisma.conversation.update({
+    where: {
+      id: data.conversationId,
+    },
+
+    data: {
+      updatedAt: new Date(),
+    },
+  });
+
+  return message;
 };
 
 export const createConversation = async (
   userId: string,
   otherUserId: string,
 ) => {
+  const existingConversations =
+    await prisma.conversation.findMany({
+      where: {
+        participants: {
+          every: {
+            userId: {
+              in: [userId, otherUserId],
+            },
+          },
+        },
+      },
+
+      include: {
+        participants: true,
+      },
+    });
+
+  const existingConversation =
+    existingConversations.find(
+      (conversation) =>
+        conversation.participants.length === 2 &&
+        conversation.participants.some(
+          (participant) =>
+            participant.userId === userId,
+        ) &&
+        conversation.participants.some(
+          (participant) =>
+            participant.userId === otherUserId,
+        ),
+    );
+
+  if (existingConversation) {
+    return prisma.conversation.findUnique({
+      where: {
+        id: existingConversation.id,
+      },
+
+      include: {
+        participants: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+                avatar: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   return prisma.conversation.create({
     data: {
       participants: {
@@ -105,6 +179,7 @@ export const createConversation = async (
         ],
       },
     },
+
     include: {
       participants: {
         include: {

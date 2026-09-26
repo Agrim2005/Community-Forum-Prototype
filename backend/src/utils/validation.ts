@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import {
   PASSWORD_MIN_LENGTH,
   POST_MAX_LENGTH,
@@ -7,19 +8,36 @@ import {
 } from "../constants/index.js";
 
 export const registerSchema = z.object({
-  name: z.string().trim().min(1, "Name is required"),
+  name: z
+    .string()
+    .trim()
+    .min(1, "Name is required"),
+
   username: z
     .string()
     .trim()
     .min(USERNAME_MIN_LENGTH)
     .max(USERNAME_MAX_LENGTH),
-  email: z.string().trim().email(),
-  password: z.string().min(PASSWORD_MIN_LENGTH),
+
+  email: z
+    .string()
+    .trim()
+    .email(),
+
+  password: z
+    .string()
+    .min(PASSWORD_MIN_LENGTH),
 });
 
 export const loginSchema = z.object({
-  email: z.string().trim().email(),
-  password: z.string().min(1, "Password is required"),
+  email: z
+    .string()
+    .trim()
+    .email(),
+
+  password: z
+    .string()
+    .min(1, "Password is required"),
 });
 
 export const createPostSchema = z.object({
@@ -28,7 +46,11 @@ export const createPostSchema = z.object({
     .trim()
     .min(1, "Post content is required")
     .max(POST_MAX_LENGTH),
-  communityId: z.string().uuid().optional(),
+
+  communityId: z
+    .string()
+    .uuid()
+    .optional(),
 });
 
 export const updatePostSchema = z.object({
@@ -40,16 +62,47 @@ export const updatePostSchema = z.object({
 });
 
 export const createCommunitySchema = z.object({
-  name: z.string().trim().min(1),
-  description: z.string().trim().min(1),
-  category: z.string().trim().min(1),
-  image: z.string().url().optional(),
-  featured: z.boolean().optional(),
+  name: z
+    .string()
+    .trim()
+    .min(1),
+
+  description: z
+    .string()
+    .trim()
+    .min(1),
+
+  category: z
+    .string()
+    .trim()
+    .min(1),
+
+  image: z
+    .string()
+    .url()
+    .optional(),
+
+  featured: z
+    .boolean()
+    .optional(),
 });
 
-export const updateCommunitySchema = createCommunitySchema.partial();
+export const updateCommunitySchema =
+  createCommunitySchema.partial();
+
+export const createConversationSchema = z.object({
+  userId: z
+    .string()
+    .uuid(),
+});
 
 export const sendMessageSchema = z.object({
-  conversationId: z.string().uuid(),
-  text: z.string().trim().min(1),
+  conversationId: z
+    .string()
+    .uuid(),
+
+  text: z
+    .string()
+    .trim()
+    .min(1, "Message cannot be empty"),
 });
